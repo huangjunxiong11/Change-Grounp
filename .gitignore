@@ -138,3 +138,5 @@ dmypy.json
 # self
 gif/makeVideo
 gif/*.mp4
+videoHome
+mp4
