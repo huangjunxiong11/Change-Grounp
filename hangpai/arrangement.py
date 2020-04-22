@@ -21,10 +21,3 @@ for b in range(movNumble):
 
 
 
-
-
-
-
-
-
-pass
