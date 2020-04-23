@@ -91,15 +91,28 @@ def get_tenran(var):
     :param var:
     :return:
     """
-    first = random.sample(var, 10)
-    tenRan = []
-    for j in first:
-        k = var[:]
-        k.remove(j)
-        child = random.sample(k, 5)
-        child.insert(0, j)
-        tenRan.append(child)
-    return tenRan
+    N = len(var)
+    if N >= 12:
+        first = random.sample(var, 10)
+        tenRan = []
+        for j in first:
+            k = var[:]
+            k.remove(j)
+            child = random.sample(k, 11)
+            child.insert(0, j)
+            tenRan.append(child)
+        return tenRan
+    else:
+        logging.warning('grounp mp4 numble < 12')
+        first = random.sample(var, 10)
+        tenRan = []
+        for j in first:
+            k = var[:]
+            k.remove(j)
+            child = random.sample(k, 5)
+            child.insert(0, j)
+            tenRan.append(child)
+        return tenRan
 
 
 def get_tenRan(movs, videohomes):
@@ -127,7 +140,8 @@ def make_avi(m, n, path):
         logging.info('开始生成背景视频{},包括{}'.format(name, n))
         L = []
         for i in n:
-            video = VideoFileClip(i)
+            video = VideoFileClip(i).subclip(t_start=0, t_end=5)
+
             L.append(video)
         final_clip = concatenate_videoclips(L)
         final_clip.to_videofile(name)
