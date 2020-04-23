@@ -40,8 +40,8 @@ def get_today_mov(Today):
                 movs += glob.glob(os.path.join(root, key, '*.mov'))
                 Movs[key] = movs
             return Movs
-        # 参考：Movs = {'heng': ['../../video/2020-04-22/heng/WBFA720-LHD202004.mov', ...],
-        #               'shu': ['../../video/2020-04-22/shu/WBFA720-LHD202005.mov', ...]}
+        # 参考：Movs = {'heng': ['../../video/2020-04-23/heng/WBFA720-LHD202004.mov', ...],
+        #               'shu': ['../../video/2020-04-23/shu/WBFA720-LHD202005.mov', ...]}
         else:
             logging.warning('not found folder {}, sleep five minutes'.format(root))
             time.sleep(60 * 5)  # 如果没有这个文件夹，睡觉一小时之后再进行检测
@@ -78,8 +78,8 @@ def get_today_videohome(Today):
                 mp4s += glob.glob(os.path.join(root, key, '*.mp4'))
                 Mp4s[key] = mp4s
             return Mp4s
-        # Mp4s = {'heng': ['../../VideoHome/2020-04-22/heng/City-29.mp4', ...],
-        #          'shu': ['../../VideoHome/2020-04-22/shu/City-13.mp4', ...]}
+        # Mp4s = {'heng': ['../../VideoHome/2020-04-23/heng/City-29.mp4', ...],
+        #          'shu': ['../../VideoHome/2020-04-23/shu/City-13.mp4', ...]}
         else:
             logging.warning('not found folder {}, sleep five minutes'.format(root))
             time.sleep(60 * 5)  # 如果没有这个文件夹，睡觉一小时之后再进行检测
@@ -103,8 +103,8 @@ def get_tenran(var):
 
 
 def get_tenRan(movs, videohomes):
-    # nameTenRan = {'WBFA720-LHD202004': [['../../VideoHome/2020-04-22/heng/City-19.mp4',...6个], ...],
-    #               'WBA1280-HJX20200': [['../../VideoHome/2020-04-22/heng/City-15.mp4', ...6个], ...], ...}
+    # nameTenRan = {'WBFA720-LHD202004': [['../../VideoHome/2020-04-23/heng/City-19.mp4',...6个], ...],
+    #               'WBA1280-HJX20200': [['../../VideoHome/2020-04-23/heng/City-15.mp4', ...6个], ...], ...}
     nameTenRan = {}
     for mov_key, mov_var in movs.items():
         for v_key, v_var in videohomes.items():
