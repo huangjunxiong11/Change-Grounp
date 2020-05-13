@@ -1,0 +1,21 @@
+# todo 视频格式转换
+
+# todo 帧率设置
+# todo 比特率设置
+# todo 剪掉片头
+# todo 剪掉片尾
+# todo 视频裁剪
+# todo 视频旋转
+# todo 视频镜像
+# todo 调整视频分辨率
+# todo 视频压缩
+# todo 添加文字水印
+# todo 添加跑马灯文字水印
+# todo 画中画
+# todo 添加随机背景音乐
+# todo 倍速播放
+# todo 添加片头
+# todo 添加片尾
+# todo 视频分段
+# todo 视频合成
+# todo 自动生成电影混剪

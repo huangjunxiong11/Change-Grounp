@@ -14,7 +14,6 @@ c, t, d = ax.plot(x, 'ro', y, 'g^', z, 'b.')
 ax.set_ylim(0, 1)
 plt.axis('off')
 
-
 def update(data):
     ax.clear()
     # c.set_ydata(data[0])

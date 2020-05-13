@@ -97,6 +97,34 @@ def get_today_videohome(Today):
                 Today = today
 
 
+def get_today_sc_videohome(Today):
+    while True:
+        sc = fpov + 'sc/' + Today
+        root = fpov + 'VideoHome/' + Today
+        if os.path.exists(sc):
+            Situations = os.listdir(sc)
+            Mp4s = []
+
+            for key in Situations:
+                if key == '.DS_Store' or key == '._.DS_Store':
+                    continue
+                # mp4s += glob.glob(os.path.join(root, key, '*.mp4'))
+                files = os.listdir(os.path.join(sc, key))
+                for i, var in enumerate(files):
+                    a = os.path.join(sc, key, var)
+                    b = os.path.join(root, key, var)
+                    Mp4s.append([a, b])
+            return Mp4s
+
+        else:
+            today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+            if today == Today:
+                logging.warning('not found folder {}, sleep five minutes'.format(sc))
+                time.sleep(60 * 5)  # 如果没有这个文件夹，睡觉一小时之后再进行检测
+            else:
+                Today = today
+
+
 def get_tenran(var):
     """
     从var列表中随机提取十组6个元素
@@ -242,27 +270,6 @@ def console_out(logFilename):
         filemode='w')  # 写入模式“w”或“a”
 
 
-def main():
-    logPath = 'log'
-    try:
-        os.mkdir(logPath)
-    except OSError:
-        pass
-    # logFilename = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '.log'
-    logFilename = logPath + '/' + time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime()) + '.log'
-    console_out(logFilename=logFilename)
-    run()
-
-
-def run():
-    Today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-    movs = get_today_mov(Today=Today)
-    videohomes = get_today_videohome(Today=Today)
-    movs_name = get_today_mov_name(Today=Today)
-    nameTenran = get_tenRan(movs=movs, videohomes=videohomes)
-    make_avis(nameTenRan=nameTenran, Today=Today, movs_name=movs_name)
-
-
 # 获取文件夹大小
 def getdirsize(dir):
     from os.path import join, getsize
@@ -292,8 +299,61 @@ def get_today_ouput(Today):
     return today_output
 
 
+# 剪切并编辑视频
+def changesize(inputname, outputname):
+    ship = VideoFileClip(inputname)
+    w, h = ship.size
+    w_r = w / 720
+    h_r = h / 1280
+    minr = min(w_r, h_r)
+    new_w = int(w / minr)
+    new_h = int(h / minr)
+    clip = ship.resize([new_w, new_h])
+    jianqie = clip.crop(x_center=int(new_w / 2), y_center=int(new_h / 2), width=720, height=1280)
+    end = ship.duration
+    if end > 20:
+        shijian = jianqie.subclip(t_start=end / 2, t_end=end / 2 + 10)
+    elif 10 <= end <= 20:
+        shijian = jianqie.subclip(t_start=0, t_end=10)
+    else:
+        shijian = jianqie.subclip(t_start=0, t_end=end)
+    patha, filename = os.path.split(outputname)
+    if not os.path.exists(patha):
+        os.makedirs(patha)
+    shijian.write_videofile(outputname)
+
+
+def main():
+    logPath = 'log'
+    try:
+        os.mkdir(logPath)
+    except OSError:
+        pass
+    # logFilename = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '.log'
+    logFilename = logPath + '/' + time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime()) + '.log'
+    console_out(logFilename=logFilename)
+    run()
+
+
+def run():
+    Today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+    names = get_today_sc_videohome(Today=Today)
+    for i, name in enumerate(names):
+        changesize(name[0], name[1])
+    movs = get_today_mov(Today=Today)
+    videohomes = get_today_videohome(Today=Today)
+    movs_name = get_today_mov_name(Today=Today)
+    nameTenran = get_tenRan(movs=movs, videohomes=videohomes)
+    make_avis(nameTenRan=nameTenran, Today=Today, movs_name=movs_name)
+
+
 if __name__ == '__main__':
     while True:
         main()
         logging.warning('Had done all successfully, waiting for new file , sleep five minutes')
-        time.sleep(60*5)
+        time.sleep(60 * 5)
+    # Today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+    # names = get_today_sc_videohome(Today=Today)
+    # for i, name in enumerate(names):
+    #     changesize(name[0], name[1])
+    # pass
