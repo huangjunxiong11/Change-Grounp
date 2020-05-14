@@ -272,15 +272,97 @@ def setbitrate(inputvideo, bitrate):
     cmd = 'ffmpeg -i ' + inputvideo + ' -b:v ' + str(bitrate) + 'k ' + name
     # 执行cmd命令
     os.system(cmd)
+
+
 # todo 添加文字水印
 
 # todo 添加跑马灯文字水印
+
 # todo 画中画
 
-# todo 添加随机背景音乐
+# todo 添加背景音乐
+def addmp3(inputvideo, mp3path):
+    """
+    给视频增加音频
+    :param inputvideo: 输入视频目录
+    :param mp3path: 输入音频目录
+    :return:
+    """
+    path, _ = os.path.splitext(inputvideo)
+    a = '增加音频{}.mp4'.format(mp3path)
+    outname = path + a
+    cmd = 'ffmpeg -i ' + inputvideo + ' -i ' + mp3path + ' -strict -2 -f mp4 ' + outname
+    os.system(cmd)
+
+
 # todo 倍速播放
+def speedplay(inputvideo, speed):
+    """
+    倍速播放
+    :param inputvideo:
+    :param speed: 速度，例如1.5
+    :return:
+    """
+
+    path, _ = os.path.splitext(inputvideo)
+    a = '改变速度{}.mp4'.format(speed)
+    outname = path + a
+    video = VideoFileClip(inputvideo)
+    result = video.fl_time(lambda t: speed * t,
+                           apply_to=['mask', 'video', 'audio']).set_end(video.end / speed)
+    result.write_videofile(outname)
+
+
 # todo 添加片头
+def addstarvideo(inputvideo, starvideo):
+    """
+    添加片头
+    :param inputvideo:
+    :param starvideo:
+    :return:
+    """
+    path, _ = os.path.splitext(inputvideo)
+    a = '增加片头{}.mp4'.format(starvideo)
+    outname = path + a
+    video1 = VideoFileClip(starvideo)
+    video2 = VideoFileClip(inputvideo)
+    video3 = concatenate_videoclips([video1, video2])
+    video3.write_videofile(outname)
+
+
 # todo 添加片尾
-# todo 视频分段
+def addendvideo(inputvideo, endvideo):
+    """
+    添加片尾
+    :param inputvideo:
+    :param endvideo:
+    :return:
+    """
+    path, _ = os.path.splitext(inputvideo)
+    a = '增加片尾{}.mp4'.format(endvideo)
+    outname = path + a
+    video1 = VideoFileClip(inputvideo)
+    video2 = VideoFileClip(endvideo)
+    video3 = concatenate_videoclips([video1, video2])
+    video3.write_videofile(outname)
+
+
+# todo 视频分段，具体根视频的裁剪一个道理，加上一个业务逻辑就变成视频分段了
+
 # todo 视频合成
+def comvideo(inputvideo, endvideo):
+    """
+    视频合成
+    :param inputvideo:合成的第一段视频
+    :param endvideo:合成的第二段视频
+    :return:
+    """
+    path, _ = os.path.splitext(inputvideo)
+    a = '视频空间合成{}.mp4'.format(endvideo)
+    outname = path + a
+    video1 = VideoFileClip(inputvideo)
+    video2 = VideoFileClip(endvideo)
+    video3 = CompositeVideoClip([video1, video2])
+    video3.write_videofile(outname)
+
 # todo 自动生成电影混剪
