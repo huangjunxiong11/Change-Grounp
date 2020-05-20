@@ -12,10 +12,9 @@ def setbitrate(inputvideo, bitrate):
     path, _ = os.path.splitext(inputvideo)
     a = '设置码率{}.mp4'.format(bitrate)
     name = path + a
-    cmd = 'ffmpeg -i ' + inputvideo + ' -b:v ' + str(bitrate) + 'k ' +name
+    cmd = 'ffmpeg -i ' + inputvideo + ' -b:v ' + str(bitrate) + 'k ' + name
     # 执行cmd命令
     os.system(cmd)
-
 
 
 setbitrate('output有音频视频.mp4', 600)
